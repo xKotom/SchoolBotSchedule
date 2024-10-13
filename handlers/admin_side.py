@@ -121,21 +121,35 @@ async def create_subgroup_state(message: types.Message, state: FSMContext):
 @dp.message_handler(text=['Удалить подгруппу ❌'])
 async def delete_subgroup_command(message: types.Message):
     if message.from_user.id == ADMINS_CHAT_ID:
-        all_subgroups = await database.get_subgroups()
-        subgroup_kb = usually_kb.group_keyboard(all_subgroups)
-        await message.answer('Выберите подгруппу для удаления', reply=False,
-                         reply_markup=subgroup_kb)
+        all_groups = await database.get_all_groups()
+        group_kb = usually_kb.group_keyboard(all_groups)
+        await message.answer('Выберите группу для удаления подгруппы', reply=False,
+                         reply_markup=group_kb)
+        await states.DeleteSubgroupStates.group_name.set()
 
-@dp.message_handler(state=states.DeleteGroupStates.group_name)
-async def delete_subgroup_command(message: types.Message, state: FSMContext):
+@dp.message_handler(state=states.DeleteSubgroupStates.group_name)
+async def delete_subgroup_group_state(message: types.Message, state: FSMContext):
     all_groups_names = [name[0] for name in await database.get_all_groups()]
     if message.text in all_groups_names:
-        await database.delete_subgroup(message.text)
-        await message.reply('Подгруппа удалена!', reply=False,
-                            reply_markup=types.ReplyKeyboardRemove())
+        async with state.proxy() as data:
+            data['group_name'] = message.text
+        all_subgroups = await database.get_subgroups(message.text)
+        subgroup_kb = usually_kb.group_keyboard(all_subgroups)
+        await message.reply('Выберите подгруппу для удаления', reply=False,
+                         reply_markup=subgroup_kb)
+        await states.DeleteSubgroupStates.subgroup_name.set()
     else:
-        await bot.send_message(message.chat.id, 'Подгруппа которую вы хотите удалить - не существует!')
+        await bot.send_message(message.chat.id, 'Группа которую вы хотите удалить подгруппу - не существует!')
+        await state.finish()
+
+@dp.message_handler(state=states.DeleteSubgroupStates.subgroup_name)
+async def delete_subgroup_state(message: types.Message, state: FSMContext):
+    async with state.proxy() as data:
+        group_name = data['group_name']
+    await database.delete_subgroup(group_name, message.text)
+    await message.reply('Подгруппа удалена!', reply=False)
     await state.finish()
+
 
 
 
@@ -196,7 +210,7 @@ async def select_day_state(message: types.Message, state: FSMContext):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, selective=True)
     markup.add("Выйти")
     markup.add("Продолжить")
-    await message.reply('Введите расписание (например, Математика - 9:00, Физика - 10:00):', reply_markup=markup)
+    await message.reply('Введите расписание (например, 1  08:00 - 08:40  Русский язык/2  08:50 - 09:30  Алгебра):', reply_markup=markup)
     await states.CreateScheduleStates.schedule_text.set()
 
 @dp.message_handler(state=states.CreateScheduleStates.schedule_text)
@@ -273,4 +287,5 @@ async def delete_schedule_day_state(message: types.Message, state: FSMContext):
         day_name = data['day_name']
     await database.delete_schedule(group_name, subgroup_name, day_name)
     await message.reply('Расписание удалено!', reply=False)
+    print(data)
     await state.finish()

@@ -78,7 +78,7 @@ async def get_subgroups(group_name):
     return [i for i in cursor.execute('SELECT * FROM subgroups WHERE group_name = ?', (group_name,))]
 
 async def delete_subgroup(group_name, subgroup_name):
-    cursor.execute('DELETE FROM subgroups WHERE group_name = ? AND subgroup_name = ?', (group_name, subgroup_name))
+    cursor.execute('DELETE FROM subgroups WHERE group_name = ? AND name = ?', (group_name, subgroup_name))
     conn.commit()
 
 
@@ -99,9 +99,12 @@ async def get_schedule(group_name, subgroup_name, day_name):
     else:
         return None
 
-async def delete_schedule(subgroup_name, group_name, day_name):
-    cursor.execute('DELETE FROM schedules WHERE subgroup_name = ? AND group_name = ? AND day_name = ?',
-                   (subgroup_name, group_name, day_name))
+async def delete_schedule(group_name, subgroup_name, day_name):
+    print(f"Входные данные в бд: group_name={group_name}, subgroup_name={subgroup_name}, day_name={day_name}")
+    cursor.execute('DELETE FROM schedules WHERE group_name = ? AND subgroup_name = ? AND day_name = ?',
+                   (group_name, subgroup_name, day_name))
+    result = cursor.fetchone()
+    print(f"Result: {result}")
     conn.commit()
 
 

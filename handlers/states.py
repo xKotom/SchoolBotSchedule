@@ -57,6 +57,7 @@ class CreateSubgroupStates(StatesGroup):
 
 
 class DeleteSubgroupStates(StatesGroup):
+    group_name = State()
     subgroup_name = State()
 
 

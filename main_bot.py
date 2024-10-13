@@ -11,9 +11,3 @@ async def on_startup(_):
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)  
 
-
-# 11 а б 
-# 10 а б в
-# 9 а б в 
-# 8 а б в 
-# 7 а б 
