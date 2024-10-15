@@ -43,13 +43,15 @@ This project is a Telegram bot that allows users to manage and retrieve informat
    The bot can process various commands related to managing groups, subgroups, and schedules.
 
 ### Admin Command Overview
-- **/start**: Start interacting with the bot.
-- **/add_group <group_name>**: Create a new group.
-- **/delete_group <group_name>**: Delete an existing group.
-- **/create_subgroup <group_name> <subgroup_name>**: Create a new subgroup.
-- **/add_schedule <subgroup_name> <group_name> <day_name> <schedule_text>**: Add a schedule for the subgroup on a specific day.
-- **/get_schedule <subgroup_name> <group_name> <day_name>**: Retrieve the schedule for a specific subgroup and day.
-- **/help**: Show available commands.
+- **/start**: Start interaction with the bot.
+- **/create_group**: <group_name>: Create a group.
+- **/delete_group**: <group_name>: Delete a group.
+- **/create_subgroup**: <group_name> <subgroup_name>: Create a subgroup.
+- **/delete_subgroup**: <group_name> <subgroup_name>: Delete a subgroup.
+- **/create_schedule**: <subgroup_name> <group_name> <day_name> <schedule_text>: Create a schedule for a subgroup for a specific day.
+- **/delete_schedule**: <subgroup_name> <group_name> <day_name>: Delete a schedule for a subgroup for a specific day.
+- **/view_schedule**: <subgroup_name> <group_name> <day_name>: View the schedule for a subgroup for a specific day.
+- **/cmd**: View available commands.
 
 ## Database Schema
 
@@ -115,13 +117,15 @@ The SQLite database consists of the following tables:
    Бот может обрабатывать различные команды, связанные с управлением группами, подгруппами и расписаниями.
 
 ### Обзор команд для администратора
-- **/start**: Начать взаимодействие с ботом.
-- **/add_group <имя_группы>**: Создать новую группу.
-- **/delete_group <имя_группы>**: Удалить существующую группу.
-- **/create_subgroup <имя_группы> <имя_подгруппы>**: Создать новую подгруппу.
-- **/add_schedule <имя_подгруппы> <имя_группы> <имя_дня> <текст_расписания>**: Добавить расписание для подгруппы на конкретный день.
-- **/get_schedule <имя_подгруппы> <имя_группы> <имя_дня>**: Получить расписание для конкретной подгруппы и дня.
-- **/help**: Показать доступные команды.
+- **/start**: Начало взаимодействия с ботом.
+- **/create_group**: <group_name>: Создать группу.
+- **/delete_group**: <group_name>: Удалить группу.
+- **/create_subgroup**: <group_name> <subgroup_name>: Создать подгруппу.
+- **/delete_subgroup**: <group_name> <subgroup_name>: Удалить подгруппу.
+- **/create_schedule**: <subgroup_name> <group_name> <day_name> <schedule_text>: Создать расписание для подгруппы на определенный день.
+- **/delete_schedule**: <subgroup_name> <group_name> <day_name>: Удалить расписание для подгруппы на определенный день.
+- **/view_schedule**: <subgroup_name> <group_name> <day_name>: Просмотр расписания для подгруппы на определенный день.
+- **/cmd**: Просмотр доступных команд.
 
 ## Схема базы данных
 
